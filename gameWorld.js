@@ -1,4 +1,5 @@
 const DELTA = 1/177;
+const HOLE_RADIUS = 54;
 
 class GameWorld {
 
@@ -33,7 +34,40 @@ class GameWorld {
             leftX: 57
         };
 
+        this.holes = [
+            new Vector2(58, 58),
+            new Vector2(58, 767),
+
+            new Vector2(750, 23),
+            new Vector2(750, 802),
+
+            new Vector2(1442, 58),
+            new Vector2(1442, 767)
+        ];
     }
+
+    handleHoles() {
+        const ballsToRemove = [];
+    
+        this.balls.forEach(ball => {
+            this.holes.forEach(hole => {
+                const dist = ball.position.subtract(hole).length();
+                if (dist <= HOLE_RADIUS) {
+                    // Mark ball for removal
+                    ballsToRemove.push(ball);
+                }
+            });
+        });
+    
+        // Remove marked balls from this.balls
+        ballsToRemove.forEach(ballToRemove => {
+            const index = this.balls.indexOf(ballToRemove);
+            if (index > -1) {
+                this.balls.splice(index, 1);
+                console.log('Ball removed from this.balls');
+            }
+        });
+    }        
 
     handleCollisions() {
         for (let i = 0; i < this.balls.length; ++i) {
@@ -46,23 +80,16 @@ class GameWorld {
                 ballA.collideWithBall(ballB);
             }
         }
-
-        /*this.balls.forEach((ballA, i) =>
-            this.balls.slice(i + 1).forEach(ballB =>
-                ballA.collideWith(ballB, DELTA)
-            )
-        );*/
     }
 
     update() {
+
+        this.handleHoles();
 
         this.handleCollisions();
 
         this.stick.update();
 
-        /*for (let i = 0; i < this.balls.length; ++i) {
-            this.balls[i].update(DELTA);
-        }*/
         this.balls.forEach(ball => ball.update(DELTA));
 
         if (!this.ballsMoving() && this.stick.shot) {
@@ -75,6 +102,16 @@ class GameWorld {
 
         this.stick.draw();
         this.balls.forEach(ball => ball.draw());
+
+        this.holes.forEach(hole => this.drawHole(hole));
+    }
+
+    drawHole(hole) {
+        canvas.ctx.beginPath();
+        canvas.ctx.arc(hole.x, hole.y, HOLE_RADIUS, 0, 2 * Math.PI);
+        canvas.ctx.fillStyle = 'rgba(0, 0, 255, 0.4)'; // Fill color
+        canvas.ctx.fill(); // Fill the circle with the current fill color
+        //canvas.ctx.stroke(); // Stroke the circle outline
     }
 
     ballsMoving() {

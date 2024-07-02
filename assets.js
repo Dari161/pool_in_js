@@ -25,12 +25,12 @@ loadAssets = (callback) => {
         return spriteImage;
     };
     
-    sprites.background = loadSprite('spr_background4.png');
-    sprites.stick = loadSprite('spr_stick.png');
-    sprites.whiteBall = loadSprite('spr_Ball2.png');
-    sprites.redBall = loadSprite('spr_redBall2.png');
-    sprites.yellowBall = loadSprite('spr_yellowBall2.png');
-    sprites.blackBall = loadSprite('spr_blackBall2.png');
+    sprites.background = loadSprite('greenBackground.png');
+    sprites.stick = loadSprite('stick.png');
+    sprites.whiteBall = loadSprite('whiteBall.png');
+    sprites.redBall = loadSprite('redBall.png');
+    sprites.yellowBall = loadSprite('yellowBall.png');
+    sprites.blackBall = loadSprite('blackBall.png');
 
     assetsLoadingLoop(callback);
 };
