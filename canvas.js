@@ -23,14 +23,18 @@ class Canvas2D {
         this.ctx.drawImage(image, -origin.x, -origin.y);
         this.ctx.restore();
     }
+    
+    writeText(text) {
+        // Set text properties
+        this.ctx.font = '80px Arial'; // Font size and family
+        this.ctx.fillStyle = 'black'; // Fill color
+        this.ctx.textAlign = 'center'; // Horizontal alignment
+        this.ctx.textBaseline = 'middle'; // Vertical alignment
+
+        // Write text on the canvas
+        this.ctx.fillText(text, this.canvas.width / 2, this.canvas.height / 2);
+        console.log(text);
+    }
 }
 
 let canvas = new Canvas2D();
-
-// testing
-/*let img = new Image();
-img.src = './assets/sprites/spr_background4.png';
-
-setTimeout(() => {
-    canvas.drawImage(img, {x: 0, y: 0});
-}, 1000);*/

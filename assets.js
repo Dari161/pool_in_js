@@ -17,15 +17,11 @@ loadAssets = (callback) => {
         let spriteImage = new Image();
         spriteImage.src = './assets/sprites/' + fileName;
 
-        /*spriteImage.onload = function() {
-            --assetsStillLoading;
-        }*/
         spriteImage.onload = () => --assetsStillLoading;
 
         return spriteImage;
     };
     
-    sprites.background = loadSprite('greenBackground.png');
     sprites.stick = loadSprite('stick.png');
     sprites.whiteBall = loadSprite('whiteBall.png');
     sprites.redBall = loadSprite('redBall.png');

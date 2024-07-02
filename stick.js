@@ -10,21 +10,12 @@ class Stick {
         this.power = 0;
         this.onShoot = onShoot;
         this.shot = false;
+        this.turn = PLAYER.RED;
+        this.yellowWentInHoleThisTurn = false;
+        this.redWentInHoleThisTurn = false;
     }
 
     update() {
-
-        // testing
-        //++this.position.x;
-
-        // testing
-        /*this.position = mouse.position;
-
-        if (mouse.left.pressed) {
-            console.log('pressed left');
-        }*/
-
-
         if (mouse.left.down) {
             this.increasePower();
         } else if (this.power > 0) {
@@ -47,7 +38,7 @@ class Stick {
     }
 
     increasePower() {
-        if (this.power > MAX_POWER) {
+        if ((this.power > MAX_POWER) || this.shot) {
             return;
         }
 
@@ -56,6 +47,9 @@ class Stick {
     }
 
     shoot() {
+        if (this.shot) {
+            return;
+        }
         this.onShoot(this.power, this.rotation);
         this.power = 0;
         this.origin = STICK_SHOT_ORIGIN.copy();
@@ -66,5 +60,26 @@ class Stick {
         this.position = position.copy();
         this.origin = STICK_ORIGIN.copy();
         this.shot = false;
+
+        if (this.turn === PLAYER.RED) {
+            this.turn = PLAYER.YELLOW; // yellow comes after red...
+            if (this.redWentInHoleThisTurn) { // ...except if a red ball goes into a hole...
+                this.turn = PLAYER.RED;
+            }
+            if (this.yellowWentInHoleThisTurn) { // ...except if a yellow ball goes into a hole too
+                this.turn = PLAYER.YELLOW;
+            }
+        } else { // player yellow
+            this.turn = PLAYER.RED; // red comes after yellow...
+            if (this.yellowWentInHoleThisTurn) { // ...except if a yellow ball goes into a hole...
+                this.turn = PLAYER.YELLOW;
+            }
+            if (this.redWentInHoleThisTurn) { // ...except if a red ball goes into a hole too
+                this.turn = PLAYER.RED;
+            }
+        }
+
+        this.yellowWentInHoleThisTurn = false;
+        this.redWentInHoleThisTurn = false;
     }
 }

@@ -7,6 +7,7 @@ class Ball {
         this.position = position;
         this.velocity = new Vector2();
         this.moving = false;
+        this.color = color;
         this.sprite = getBallSpriteByColor(color);
     }
 
@@ -32,7 +33,7 @@ class Ball {
     }
 
     collideWithBall(ball) {
-        // elastic collition (in 2D)
+        // elastic collition (in 2D) // I don't understand how it works
 
         // find a normal vector
         const n = this.position.subtract(ball.position);
@@ -116,12 +117,4 @@ class Ball {
             this.velocity = this.velocity.mult(0.98);
         }
     }
-
-    /*collideWith(object) {
-        if (object instanceof Ball) {
-            this.collideWithBall(object);
-        } else {
-            this.collideWithTable(object);
-        }
-    }*/
 }
