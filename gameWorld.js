@@ -13,23 +13,32 @@ class GameWorld {
 
         this.middleX = Math.ceil(canvas.canvas.height / 2);
 
+        const startXCoord = 1022;
+        const XCoordGap = 35;
+        /*this.xCoords = new Array(5);
+        for (let i = 0; i < this.xCoords.length; ++i) {
+            this.xCoords[i] = startXCoord + i * XCoordGap;
+        }*/
+        this.xCoords = Array.from({ length: 5 }, (_, i) => startXCoord + i * XCoordGap);            
+        //const xCoords = [startXCoord, startXCoord + 35, startXCoord + 2 * 35, startXCoord + 3 * 35, startXCoord + 4 * 35];
+
         this.balls = [
             [new Vector2(this.middleX, this.middleX), COLOR.WHITE],//0 white
-            [new Vector2(1022, 413), COLOR.YELLOW],//1
-            [new Vector2(1056, 393), COLOR.YELLOW],//2
-            [new Vector2(1056, 433), COLOR.RED],//3
-            [new Vector2(1090, 374), COLOR.RED],//4
-            [new Vector2(1090, 413), COLOR.BLACK],//5
-            [new Vector2(1090, 452), COLOR.YELLOW],//6
-            [new Vector2(1126, 354), COLOR.YELLOW],//7
-            [new Vector2(1126, 393), COLOR.RED],//8
-            [new Vector2(1126, 433), COLOR.YELLOW],//9
-            [new Vector2(1126, 472), COLOR.RED],//10
-            [new Vector2(1162, 335), COLOR.RED],//11
-            [new Vector2(1162, 374), COLOR.RED],//12
-            [new Vector2(1162, 413), COLOR.YELLOW],//13
-            [new Vector2(1162, 452), COLOR.RED],//14
-            [new Vector2(1162, 491), COLOR.YELLOW]//15
+            [new Vector2(this.xCoords[0], 413), COLOR.YELLOW],//1
+            [new Vector2(this.xCoords[1], 393), COLOR.YELLOW],//2
+            [new Vector2(this.xCoords[1], 433), COLOR.RED],//3
+            [new Vector2(this.xCoords[2], 374), COLOR.RED],//4
+            [new Vector2(this.xCoords[2], 413), COLOR.BLACK],//5
+            [new Vector2(this.xCoords[2], 452), COLOR.YELLOW],//6
+            [new Vector2(this.xCoords[3], 354), COLOR.YELLOW],//7
+            [new Vector2(this.xCoords[3], 393), COLOR.RED],//8
+            [new Vector2(this.xCoords[3], 433), COLOR.YELLOW],//9
+            [new Vector2(this.xCoords[3], 472), COLOR.RED],//10
+            [new Vector2(this.xCoords[4], 335), COLOR.RED],//11
+            [new Vector2(this.xCoords[4], 374), COLOR.RED],//12
+            [new Vector2(this.xCoords[4], 413), COLOR.YELLOW],//13
+            [new Vector2(this.xCoords[4], 452), COLOR.RED],//14
+            [new Vector2(this.xCoords[4], 491), COLOR.YELLOW]//15
         ].map(params => new Ball(params[0], params[1]));
 
         this.whiteBall = this.balls[0];
