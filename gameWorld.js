@@ -60,7 +60,7 @@ class GameWorld {
         this.outterTableWidth = canvas.canvas.width - 2 * this.outterRimThicness;
         this.outterTableHeight = canvas.canvas.height - 2 * this.outterRimThicness;
 
-        this.leftRandomWHiteBallBound = this.table.leftX + HOLE_RADIUS + BALL_DIAMETER;
+        this.leftRandomWhiteBallBound = this.table.leftX + HOLE_RADIUS + BALL_DIAMETER;
         this.rightRandomWhiteBallBound = this.table.rightX + HOLE_RADIUS + BALL_DIAMETER;
         this.topRandomWhiteBallBound = this.table.topY - HOLE_RADIUS - BALL_DIAMETER;
         this.bottomRandomWhiteBallBound = this.table.bottomY - HOLE_RADIUS - BALL_DIAMETER;
@@ -166,9 +166,9 @@ class GameWorld {
                 this.repositionWhiteBallNeeded = false;
 
                 let whiteBallNewPlace = new Vector2(this.middleX, this.middleX); // if this place is occupied generate new ones at random locations, until one is not occupied
-                while (isWhiteBallSpaceOccupied(whiteBallNewPlace)) {
+                while (this.isWhiteBallSpaceOccupied(whiteBallNewPlace)) {
                     whiteBallNewPlace = new Vector2(
-                        getRandomFloat(leftRandomWHiteBallBound, rightRandomWhiteBallBound),
+                        getRandomFloat(leftRandomWhiteBallBound, rightRandomWhiteBallBound),
                         getRandomFloat(topRandomWhiteBallBound, bottomRandomWhiteBallBound)
                     );
                 }
