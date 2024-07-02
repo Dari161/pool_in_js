@@ -58,7 +58,7 @@ class GameWorld {
         this.tableHeight = this.table.bottomY - this.table.topY;
 
         this.outterTableWidth = canvas.canvas.width - 2 * this.outterRimThicness;
-        this.outterTableHeight = canvas.canvas.height - 2* this.outterRimThicness;
+        this.outterTableHeight = canvas.canvas.height - 2 * this.outterRimThicness;
 
         this.leftRandomWHiteBallBound = this.table.leftX + HOLE_RADIUS + BALL_DIAMETER;
         this.rightRandomWhiteBallBound = this.table.rightX + HOLE_RADIUS + BALL_DIAMETER;
