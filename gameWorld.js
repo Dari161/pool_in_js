@@ -1,5 +1,6 @@
 const DELTA = 1/177;
 const HOLE_RADIUS = 50;
+const SQUARED_HOLE_RADIUS = Math.power(HOLE_RADIUS, 2);
 
 const TWO_PI = Math.PI * 2;
 
@@ -90,8 +91,7 @@ class GameWorld {
         this.balls.forEach(ball => {
             if (ball.moving) { // no need to check against every holl, if the ball isn't even moving
                 this.holes.forEach(hole => {
-                    const dist = ball.position.subtract(hole).length();
-                    if (dist <= HOLE_RADIUS) {
+                    if (ball.position.subtract(hole).squaredLength() <= SQUARED_HOLE_RADIUS) { // ball center inside hole
                         // Mark ball for removal
                         ballsToRemove.push(ball);
                     }
@@ -146,7 +146,7 @@ class GameWorld {
 
     isWhiteBallSpaceOccupied(whiteBallNewPlace) {
         return this.balls.some(ball => 
-            ball.position.subtract(whiteBallNewPlace).length() <= BALL_DIAMETER
+            ball.position.subtract(whiteBallNewPlace).squaredLength() <= SQUARED_BALL_DIAMETER
         );
     }    
 

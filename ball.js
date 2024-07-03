@@ -1,5 +1,6 @@
 const BALL_ORIGIN = new Vector2(25, 25);
 const BALL_DIAMETER = 38;
+const SQUARED_BALL_DIAMETER = MAtH.power(BALL_DIAMETER, 2);
 const BALL_RADIUS = BALL_DIAMETER / 2;
 
 class Ball {
@@ -17,7 +18,7 @@ class Ball {
         // apply friction
         this.velocity = this.velocity.mult(0.984);
 
-        if (this.velocity.length() < 5) {
+        if (this.velocity.squaredLength() < 25) {
             this.velocity = new Vector2();
             this.moving = false;
         }
@@ -39,13 +40,15 @@ class Ball {
         const n = this.position.subtract(ball.position);
 
         // find distance
-        const dist = n.length();
+        let dist = n.squaredLength();
 
-        if (dist > BALL_DIAMETER) {
+        if (dist > SQUARED_BALL_DIAMETER) {
             return; // no collision occoured
         }
 
-        // find minimum translation distance
+        dist = Math.sqrt(dist);
+
+        // find minimum translation distance // note that BALL_DIAMETER <= dist, since we will not be in this function otherwise (see above)
         const mtd = n.mult((BALL_DIAMETER - dist) / dist);
 
         // push-pull balls apart
