@@ -1,6 +1,6 @@
 const DELTA = 1/177;
 const HOLE_RADIUS = 50;
-const SQUARED_HOLE_RADIUS = Math.power(HOLE_RADIUS, 2);
+const SQUARED_HOLE_RADIUS = Math.pow(HOLE_RADIUS, 2);
 
 const TWO_PI = Math.PI * 2;
 
@@ -12,38 +12,7 @@ class GameWorld {
 
     constructor() {
 
-        this.middleX = Math.ceil(canvas.canvas.height / 2);
-
-        const startXCoord = 1022;
-        const XCoordGap = 35;
-        /*this.xCoords = new Array(5);
-        for (let i = 0; i < this.xCoords.length; ++i) {
-            this.xCoords[i] = startXCoord + i * XCoordGap;
-        }*/
-        this.xCoords = Array.from({ length: 5 }, (_, i) => startXCoord + i * XCoordGap);            
-        //const xCoords = [startXCoord, startXCoord + 35, startXCoord + 2 * 35, startXCoord + 3 * 35, startXCoord + 4 * 35];
-
-        this.balls = [
-            [new Vector2(this.middleX, this.middleX), COLOR.WHITE],//0 white
-            [new Vector2(this.xCoords[0], 413), COLOR.YELLOW],//1
-            [new Vector2(this.xCoords[1], 393), COLOR.YELLOW],//2
-            [new Vector2(this.xCoords[1], 433), COLOR.RED],//3
-            [new Vector2(this.xCoords[2], 374), COLOR.RED],//4
-            [new Vector2(this.xCoords[2], 413), COLOR.BLACK],//5
-            [new Vector2(this.xCoords[2], 452), COLOR.YELLOW],//6
-            [new Vector2(this.xCoords[3], 354), COLOR.YELLOW],//7
-            [new Vector2(this.xCoords[3], 393), COLOR.RED],//8
-            [new Vector2(this.xCoords[3], 433), COLOR.YELLOW],//9
-            [new Vector2(this.xCoords[3], 472), COLOR.RED],//10
-            [new Vector2(this.xCoords[4], 335), COLOR.RED],//11
-            [new Vector2(this.xCoords[4], 374), COLOR.RED],//12
-            [new Vector2(this.xCoords[4], 413), COLOR.YELLOW],//13
-            [new Vector2(this.xCoords[4], 452), COLOR.RED],//14
-            [new Vector2(this.xCoords[4], 491), COLOR.YELLOW]//15
-        ].map(params => new Ball(params[0], params[1]));
-
-        this.whiteBall = this.balls[0];
-        this.stick = new Stick(new Vector2(this.middleX, this.middleX), this.whiteBall.shoot.bind(this.whiteBall));
+        this.middleY = canvas.canvas.height / 2;
     
         this.rimThicness = 57;
         this.outterRimThicness = 30;
@@ -79,8 +48,46 @@ class GameWorld {
             new Vector2(this.table.rightX, this.table.bottomY)
         ];
 
-        this.redCount = 7;
-        this.yellowCount = 7;
+        const startXCoord = this.table.rightX - this.middleY;
+        const XCoordGap = BALL_DIAMETER - 3;
+        this.xCoords = new Array(5);
+        for (let i = 0; i < this.xCoords.length; ++i) {
+            this.xCoords[i] = startXCoord + i * XCoordGap;
+        }
+
+        const YCoordGap = BALL_RADIUS + 0.5;
+
+        this.balls = [
+            [this.middleY, this.middleY, COLOR.WHITE],
+            [this.xCoords[0], this.middleY, COLOR.YELLOW],
+            [this.xCoords[1], this.middleY - YCoordGap, COLOR.YELLOW],
+            [this.xCoords[1], this.middleY + YCoordGap, COLOR.RED],
+            [this.xCoords[2], this.middleY - 2 * YCoordGap, COLOR.RED],
+            [this.xCoords[2], this.middleY, COLOR.BLACK],
+            [this.xCoords[2], this.middleY + 2 * YCoordGap, COLOR.YELLOW],
+            [this.xCoords[3], this.middleY - 3 * YCoordGap, COLOR.YELLOW],
+            [this.xCoords[3], this.middleY - YCoordGap, COLOR.RED],
+            [this.xCoords[3], this.middleY + YCoordGap, COLOR.YELLOW],
+            [this.xCoords[3], this.middleY + 3 * YCoordGap, COLOR.RED],
+            [this.xCoords[4], this.middleY - 4 * YCoordGap, COLOR.RED],
+            [this.xCoords[4], this.middleY - 2 * YCoordGap, COLOR.RED],
+            [this.xCoords[4], this.middleY, COLOR.YELLOW],
+            [this.xCoords[4], this.middleY + 2 * YCoordGap, COLOR.RED],
+            [this.xCoords[4], this.middleY + 4 * YCoordGap, COLOR.YELLOW]
+        ].map(([x, y, color]) => new Ball(new Vector2(x, y), color));
+
+        this.whiteBall = this.balls[0];
+        this.stick = new Stick(new Vector2(this.middleY, this.middleY), this.whiteBall.shoot.bind(this.whiteBall));
+
+        this.redCount = 0;
+        this.yellowCount = 0;
+        this.balls.forEach(ball => {
+            if (ball.color === COLOR.RED) {
+                ++this.redCount;
+            } else if (ball.color === COLOR.YELLOW) {
+                ++this.yellowCount;
+            }
+        });
 
         this.repositionWhiteBallNeeded = false;
     }
@@ -103,7 +110,6 @@ class GameWorld {
         ballsToRemove.forEach(ballToRemove => {
             const index = this.balls.indexOf(ballToRemove);
 
-            // TODO: dont reposition the ball, while other balls are moving
             if (ballToRemove.color === COLOR.WHITE) {
                 this.repositionWhiteBallNeeded = true;
             } else if (ballToRemove.color === COLOR.RED) {
@@ -112,7 +118,7 @@ class GameWorld {
             } else if (ballToRemove.color === COLOR.YELLOW) {
                 --this.yellowCount;
                 this.stick.yellowWentInHoleThisTurn = true;
-            } else if (ballToRemove.color === COLOR.BLACK) {
+            } else { // must be black
                 if (this.stick.turn === PLAYER.RED) {
                     if (this.redCount === 0) {
                         this.redWin();
@@ -133,12 +139,10 @@ class GameWorld {
 
     handleCollisions() {
         for (let i = 0; i < this.balls.length; ++i) {
-            //this.balls[i].collideWith(table);
-            this.balls[i].collideWithTable(this.table);
+            const ballA = this.balls[i];
+            ballA.collideWithTable(this.table);
             for (let j = i + 1; j < this.balls.length; ++j) {
-                const ballA = this.balls[i];
                 const ballB = this.balls[j];
-                //ballA.collideWith(ballB/*, DELTA*/);
                 ballA.collideWithBall(ballB);
             }
         }
@@ -165,7 +169,7 @@ class GameWorld {
             if (this.repositionWhiteBallNeeded) {
                 this.repositionWhiteBallNeeded = false;
 
-                let whiteBallNewPlace = new Vector2(this.middleX, this.middleX); // if this place is occupied generate new ones at random locations, until one is not occupied
+                let whiteBallNewPlace = new Vector2(this.middleY, this.middleY); // if this place is occupied generate new ones at random locations, until one is not occupied
                 while (this.isWhiteBallSpaceOccupied(whiteBallNewPlace)) {
                     whiteBallNewPlace = new Vector2(
                         getRandomFloat(leftRandomWhiteBallBound, rightRandomWhiteBallBound),

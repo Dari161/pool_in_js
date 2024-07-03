@@ -1,6 +1,6 @@
 const BALL_ORIGIN = new Vector2(25, 25);
 const BALL_DIAMETER = 38;
-const SQUARED_BALL_DIAMETER = MAtH.power(BALL_DIAMETER, 2);
+const SQUARED_BALL_DIAMETER = Math.pow(BALL_DIAMETER, 2);
 const BALL_RADIUS = BALL_DIAMETER / 2;
 
 class Ball {
